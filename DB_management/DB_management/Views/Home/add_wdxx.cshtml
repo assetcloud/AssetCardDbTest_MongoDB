@@ -1,0 +1,49 @@
+﻿
+@{
+    ViewData["Title"] = "添加维度信息";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div style="width: 975px;height: 500px;margin-left: 70px;margin-right: 70px;background: rgba(255, 255, 255, 0.65);border: solid 3px;border-color: #0aafb7;overflow-y:auto; overflow-x:auto;">
+    <div>
+        <h2 align="center">维度信息添加</h2>
+        <hr />
+        <form action="/Home/addWDXX_OK" method="post">
+            <div style="margin-top:15px;margin-left:300px;font-size:large;">
+                <label style="width:150px">请输入维度信息名</label>
+                <input style="margin-left:30px;" name="wdxx_name"/>
+            </div>
+            <hr />
+            <div style="margin-top:15px;margin-left:30px;font-size:large;">
+                <ul style="padding-left:0px;margin-left:300px">
+                    <li style="">
+                        <label style="width:150px" align="left">请选择所属的维度</label>
+                        <select style="margin-left:10px;" name="wd_name">
+                            <option>资产类别维度</option>
+                            <option>应用特性维度</option>
+                            <option>管理者维度</option>
+                            <option>自定义维度</option>
+                        </select>
+                    </li>
+                    <li style="">
+                        <label style="width:150px" align="left">请输入维度信息id</label>
+                        <input style="margin-left:10px;" name="wdxx_id" />
+                    </li>
+                    <li style="">
+                        <label style="width:150px" align="left">选择其父类</label>
+                        <input style="margin-left:10px;" name="fl_name" />
+                    </li>
+                    <li style="">
+                        <label style="width:150px" align="left">备注</label>
+                        <input style="margin-left:10px;" name="bz">
+                    </li>
+                </ul>
+            </div>
+            <hr />
+            <div>
+                <input type="button" style="float:right;margin-right:25px" value="取消" />
+                <input type="submit" style="float:right;margin-right:25px" value="提交" />
+                <hr style="display:inline" />
+            </div>
+        </form>
+    </div>
+</div>

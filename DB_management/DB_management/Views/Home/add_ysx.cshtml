@@ -1,0 +1,213 @@
+﻿
+@{
+    ViewData["Title"] = "元属性添加";
+    var p = (YSX_Model)ViewData["YSX_Model"];
+    var name_list = p.Dimension_dic.Keys;
+    var type0 = (List<Dimension_Information_Model>)ViewData["type0"];
+    var type1 = (List<Dimension_Information_Model>)ViewData["type1"];
+    var type2 = (List<Dimension_Information_Model>)ViewData["type2"];
+    var type3 = (List<Dimension_Information_Model>)ViewData["type3"];
+}
+<div style="width: 975px;height: 500px;margin-left: 70px;margin-right: 70px;background: rgba(255, 255, 255, 0.65);border: solid 3px;border-color: #0aafb7;overflow-y:auto; overflow-x:auto;">
+    <div>
+        <h2 align="center">元属性添加</h2>
+        <hr />
+        <form action="/Home/addYSX_OK" method="post">
+            <div style="margin-top:15px;margin-left:300px;font-size:large;">
+                <label style="width:150px">请输入元属性名称</label>
+                <input style="margin-left:30px;" name="Name" />
+            </div>
+            <hr />
+            <div style="margin-top:15px;margin-left:30px;font-size:large;">
+                <table style="padding-left:0px;margin-left:80px;">
+                    <tr>
+                        <td style="margin-right:15px;">
+                            <label style="width:100px;margin-left:35px" align="left">元属性id</label>
+                            <input style="margin-left:10px;" name="ID" />
+                        </td>
+                        <td style="">
+                            <label style="width:100px;margin-left:35px" align="left">数据类型</label>
+                            <select style="margin-left:10px;width:196px" name="Data_Type">
+                                <option> 整型 </option>
+                                <option> 浮点型 </option>
+                                <option> 文本型 </option>
+                                <option> 时间型 </option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="">
+                            <label style="width:100px;margin-left:35px" align="left">计量单位</label>
+                            <input style="margin-left:10px;" name="Unit" />
+                        </td>
+                        <td style="">
+                            <label style="width:100px;margin-left:35px" align="left">长度</label>
+                            <input style="margin-left:10px;" name="Length" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="">
+                            <label style="width:100px;margin-left:35px" align="left">版本</label>
+                            <input style="margin-left:10px;" name="Edition" />
+                        </td>
+                        <td style="">
+                            <label style="width:100px;margin-left:35px" align="left">备注</label>
+                            <input style="margin-left:10px;" name="Remarks" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <hr />
+            <div style="margin-top:15px;margin-left:30px;font-size:large;">
+
+                <label style="font-size:smaller;color:goldenrod">单击按钮添加选择维度</label>
+                <input type="button" value="添加" onclick="ysxwd_add()" id="wd_button" />
+                <ul id="wd"></ul>
+            </div>
+            <hr />
+            <div>
+                <input type="button" style="float:right;margin-right:25px" value="取消" />
+                <input type="submit" style="float:right;margin-right:25px" value="提交" />
+                <hr style="display:inline" />
+            </div>
+        </form>
+    </div>
+</div>
+<select id="kz" style="display:none">
+    <option>
+        -- 维度名称 -- 
+    </option>
+    @foreach (string name in name_list)
+    {
+        <option>
+            @name
+        </option>
+    }
+</select>
+<select id="type0" style="display:none">
+    <option>
+        -- 维度信息 --
+    </option>
+    @for (var i = 0; i < type0.Count; i++)
+    {
+        <option>
+            @type0[i].NAME
+        </option>
+    }
+</select>
+<select id="type1" style="display:none">
+    <option>
+        -- 维度信息 --
+    </option>
+    @for (var i = 0; i < type1.Count; i++)
+    {
+        <option>
+            @type1[i].NAME
+        </option>
+    }
+</select>
+<select id="type2" style="display:none">
+    <option>
+        -- 维度信息 --
+    </option>
+    @for (var i = 0; i < type2.Count; i++)
+    {
+        <option>
+            @type2[i].NAME
+        </option>
+    }
+</select>
+<select id="type3" style="display:none">
+    <option>
+        -- 维度信息 --
+    </option>
+    @for (var i = 0; i < type3.Count; i++)
+    {
+        <option>
+            @type3[i].NAME
+        </option>
+    }
+</select>
+<script type="text/javascript">
+    var kz_sum = 0;
+    function ysxwd_add() {
+        kz_sum++;
+        var ul = document.getElementById("wd");
+
+        var li = document.createElement("li");
+        var label1 = document.createElement("label");
+        var select = document.createElement("select");
+        var label3 = document.createElement("label");
+        var select2 = document.createElement("select");
+
+        li.style = "display: inline-block;margin-left:50px";
+
+        var sl = document.getElementById("kz");
+        var a = sl.getElementsByTagName("option");
+        for (var i = 0; i < a.length; i++) {
+            var option = document.createElement("option");
+            option.innerHTML = a[i].innerHTML;
+            select.appendChild(option);
+        }
+        var xx = kz_sum;
+        select.onchange = function () {
+            try {
+                var select2 = document.getElementById("select2" + xx.toString());
+                try {
+                    while (select2.hasChildNodes()) //当div下还存在子节点时 循环继续
+                    {
+                        select2.removeChild(select2.firstChild);
+                    }
+                } catch{ };
+
+                var value = document.getElementById("sele" + xx.toString()).value;
+                switch (value) {
+                    case "管理者维度": var sl = document.getElementById("type" + "2"); break;
+                    case "资产类别维度": var sl = document.getElementById("type" + "0"); break;
+                    case "应用特性维度": var sl = document.getElementById("type" + "1"); break;
+                    case "自定义维度": var sl = document.getElementById("type" + "3"); break;
+                }
+                var a = sl.getElementsByTagName("option");
+                for (var i = 0; i < a.length; i++) {
+                    var option = document.createElement("option");
+                    option.innerHTML = a[i].innerHTML;
+                    select2.appendChild(option);
+                }
+            }
+            catch
+            { };
+        };
+        switch (kz_sum%5) {
+            case 1: var sl = document.getElementById("type" + "0"); break;
+            case 2: var sl = document.getElementById("type" + "2"); break;
+            case 3: var sl = document.getElementById("type" + "1"); break;
+            case 4: var sl = document.getElementById("type" + "3"); break;
+        }
+        var a = sl.getElementsByTagName("option");
+        for (var i = 0; i < a.length; i++) {
+            var option = document.createElement("option");
+            option.innerHTML = a[i].innerHTML;
+            select2.appendChild(option);
+        }
+        select.id = "sele" + kz_sum.toString();
+        select2.id = "select2" + kz_sum.toString();
+        label1.innerHTML = "请选择维度名称";
+        label3.innerHTML = "请选择维度信息";
+        label1.style = "margin-left:20px";
+        label3.style = "margin-left:20px";
+        select.style = "margin-left:20px";
+        select2.style = "margin-left:20px";
+        select.selectedIndex = kz_sum;
+        select2.selectedIndex = 1;
+
+        select2.name = "ysx_wd_value_" + kz_sum.toString();
+        select.name = "ysx_wd_key_" + kz_sum.toString();
+        
+        select2.appendChild(option);
+        li.appendChild(label1);
+        li.appendChild(select);
+        li.appendChild(label3);
+        li.appendChild(select2);
+        ul.appendChild(li);
+    }
+</script>

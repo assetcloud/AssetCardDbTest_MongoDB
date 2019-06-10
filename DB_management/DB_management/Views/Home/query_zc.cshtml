@@ -1,0 +1,84 @@
+﻿
+@{
+    ViewData["Title"] = "资产查询";
+    var ZC_datas = (List<List<string>>)ViewData["ZC_datas"];
+    var sx_name = (List<string>)ViewData["sx_name"];
+}
+<div style="width: 975px;height: 500px;margin-left: 70px;margin-right: 70px;background: rgba(255, 255, 255, 0.65);border: solid 3px;border-color: #0aafb7;overflow:auto;">
+    <div>
+        <h2 align="center">资产查询</h2>
+        <hr />
+        <form action="/Home/query_zc_1" method="post">
+            <div style="margin-top:15px;margin-left:30px;">
+                <label style="width:220px">按照元属性值查询:</label>
+                <label>
+                    元属性名称:
+                </label>
+                <input name="ysx_name" value=@ViewData["ysx_name"] />
+                <label>
+                    元属性值:
+                </label>
+                <input name="ysx_value" value=@ViewData["ysx_value"] />
+                <input type="submit" style="margin-left:10px" value="确定" />
+            </div>
+        </form>
+        <hr />
+        <form action="/Home/query_zc_3" method="post">
+            <div style="margin-top:15px;margin-left:30px;">
+                <label style="width:220px">按照管理者信息查询</label>
+                <label>管理者:</label>
+                <select name="glz">
+                    @foreach (var i in (List<string>)ViewData["glz_list"])
+                    {
+                        <option>@i
+                            </option>
+                    }
+                    </select>
+                <input type="submit" style="margin-left:10px" value="确定" />
+            </div>
+        </form>
+        <hr />
+        <form action="/Home/query_zc_2" method="post">
+            <div style="margin-top:15px;margin-left:30px;">
+                <label style="width:220px">查询单一资产</label>
+                <label>资产名称:</label>
+                <input name="zc_name" value=@ViewData["zc_name"] />
+                <input type="submit" style="margin-left:10px" value="确定" />
+            </div>
+        </form>
+        <hr />
+        <form action="/Home/add_zc_ten" method="post">
+            <div style="margin-top:15px;margin-left:30px;">
+                <label style="width:220px">添加资产</label>
+                <input type="submit" style="margin-left:10px" value="添加" />
+            </div>
+        </form>
+        <hr />
+        <div style="white-space:nowrap">
+            <h4>搜索结果:</h4>
+            <hr />
+            <div>
+                <table>
+                    <tr>
+                        @for (int i = 0; i < sx_name.Count; i++)
+                        {
+                            <th style="width:100px">@sx_name[i]</th>
+                        }
+                    </tr>
+                </table>
+                <hr />
+                <table id='myMsgTable'>
+                    @for (int i = 0; i < @ZC_datas.Count; i++)
+                    {
+                        <tr>
+                            @foreach (var data in @ZC_datas[i])
+                            {
+                                <td style="min-width:100px">@data</td>
+                            }
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
