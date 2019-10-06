@@ -1,0 +1,83 @@
+﻿@{
+    ViewData["Title"] = "删除元属性";
+}
+<div style="width: 975px;height: 500px;margin-left: 70px;margin-right: 70px;background: rgba(255, 255, 255, 0.65);border: solid 3px;border-color: #0aafb7;overflow-y:auto; overflow-x:auto;">
+    <div id="classify">
+        <h2 align="center">元属性删除 </h2>
+        <hr />
+        <label>元属性选择:</label>
+        <form action="/YSX_/Del_ysx_OK" method="post">
+            <ul>
+                <li>
+                    <div>
+                        <label style="margin-left:10px;">请选择所属的资产类别维度：</label>
+                        <select name="Kindda" id="Kindda" style="margin-left:5px;" v-on:change="Kinddachange">
+
+                        </select>
+                        <label style="margin-left:10px;">请选择元属性：</label>
+                        <select name="One_Class" id="One_Class" style="margin-left:5px;" v-on:change="One_Classchange">
+                            <option>
+                                -- 维度 --
+                            </option>
+                        </select>
+                    </div>
+                </li>
+            </ul>
+            <div>
+                <input type="button" style="float:right;margin-right:25px" value="取消" />
+                <input type="submit" style="float:right;margin-right:25px" value="提交" />
+                <hr style="display:inline" />
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    var vue = new Vue({
+        el: '#classify',
+        data: {
+            classify:[],
+            type: ""
+        },
+        methods: {
+            crt: function () {
+                $.ajax({
+                    url: "/API_/Get_WD_name",
+                    type: "get",
+                    data: { "Type": "资产类别维度" },
+                    success: function (data) {
+                        vue.classify = data;
+                        document.getElementById("Kindda").options.add(new Option("-- 维度 --"));
+                        for (i = 0; i < data.length; i++) {
+                            document.getElementById("Kindda").options.add(new Option(data[i]));
+                        }
+                    }
+                });
+            },
+            Kinddachange: function () {
+                document.getElementById("One_Class").innerText = "";
+                if (document.getElementById("Kindda").selectedIndex != 0)
+                {
+                    $.ajax({
+                        url: "/API_/Get_YSXS_Name",
+                        type: "get",
+                        data: {
+                            "WD": "资产类别维度",
+                            "Name": vue.classify[document.getElementById("Kindda").selectedIndex-1]
+                        },
+                        success: function (data) {
+                            for (var key in data) {
+                                document.getElementById("One_Class").options.add(new Option(data[key],key ));
+                            }
+                        }
+                    });
+                }
+                for (i = 0; i < this.classify[document.getElementById("Kindda").selectedIndex].One_Class.length; i++) {
+                    document.getElementById("One_Class").options.add(new Option(this.classify[document.getElementById("Kindda").selectedIndex].One_Class[i]));
+                }
+            },
+            One_Classchange: function () {
+            }
+        }
+    })
+    window.onload = vue.crt;
+</script>

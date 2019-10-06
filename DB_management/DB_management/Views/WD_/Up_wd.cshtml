@@ -1,0 +1,122 @@
+﻿@{
+    ViewData["Title"] = "修改维度";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div style="width: 975px;height: 500px;margin-left: 70px;margin-right: 70px;background: rgba(255, 255, 255, 0.65);border: solid 3px;border-color: #0aafb7;overflow-y:auto; overflow-x:auto;">
+    <div>
+        <h2 align="center">修改维度信息 </h2>
+        <hr />
+        <form action="/WD_/Up_wd_OK" method="post">
+            <ul>
+                <li>
+                    <div id="classify">
+                        <label style="margin-left:10px;">请选择维度类别：</label>
+                        <select name="Kindda" id="Kindda" style="margin-left:5px;" v-on:change="Kinddachange">
+                            <option v-for="value in classify">
+                                {{ value}}
+                            </option>
+                        </select>
+                        <label style="margin-left:10px;">请选择维度名称：</label>
+                        <select name="One_Class" id="One_Class" style="margin-left:5px;" v-on:change="One_Classchange">
+                            <option>
+                                -- 名称 --
+                            </option>
+                        </select>
+                    </div>
+                </li>
+            </ul>
+
+            <ul style="padding-left:0px;margin-left:300px">
+                <li style="">
+                    <label style="width:150px" align="left">请输入维度id</label>
+                    <input style="margin-left:10px;" name="wd_id"id="wd_id" />
+                </li>
+                <li style="">
+                    <label style="width:150px">请输入维度类别</label>
+                    <input style="margin-left:10px;" name="wd_type"id="wd_type" />
+                </li>
+                <li style="">
+                    <label style="width:150px">请输入父类id</label>
+                    <input style="margin-left:10px;" name="wd_F_id"id="wd_F_id" />
+                </li>
+                <li style="">
+                    <label style="width:150px" align="left">请输入备注信息</label>
+                    <input style="margin-left:10px;" name="bg" id ="bg" />
+                </li>
+            </ul>
+            <hr />
+            <div>
+                <input type="button" style="float:right;margin-right:300px" value="取消" />
+                <input type="submit" style="float:right;margin-right:300px" value="提交" />
+                <hr style="display:inline" />
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    var vue = new Vue({
+        el: '#classify',
+        data: {
+            classify:["-- 维度 --","资产类别维度","应用特性维度","管理者维度","自定义维度"]
+        },
+        methods: {
+            Kinddachange: function () {
+                document.getElementById("One_Class").innerText = "";
+                if (document.getElementById("Kindda").selectedIndex != 0) {
+                    $.ajax({
+                        url: "/API_/Get_WD_name",
+                        type: "get",
+                        data: { "Type": this.classify[document.getElementById("Kindda").selectedIndex] },
+                        success: function (data) {
+                            for (i = 0; i < data.length; i++) {
+                                document.getElementById("One_Class").options.add(new Option(data[i]));
+                            }
+                            $.ajax({
+                                url: "/API_/Get_WD_XX",
+                                type: "get",
+                                data: { "Name": data[0] },
+                                success: function (data) {
+                                    if (data == null) {
+                                        document.getElementById("wd_id").value = "";
+                                        document.getElementById("wd_type").value = "";
+                                        document.getElementById("wd_F_id").value = "";
+                                        document.getElementById("bg").value = "";
+                                        return;
+                                    }
+                                    else {
+                                        document.getElementById("wd_id").value = data.id;
+                                        document.getElementById("wd_type").value = data.type;
+                                        document.getElementById("wd_F_id").value = data.f_ID;
+                                        document.getElementById("bg").value = data.remarks;
+                                    }
+                                }
+                            })
+                        }
+                    })
+                }
+            },
+            One_Classchange: function () {
+                var name = document.getElementById("One_Class").value;
+                if (name == "")
+                    return;
+                else {
+                    $.ajax({
+                        url: "/API_/Get_WD_XX",
+                        type: "get",
+                        data: { "Name": name },
+                        success: function (data) {
+                            if (data == null)
+                                return;
+                            else {
+                                document.getElementById("wd_id").value = data.id;
+                                document.getElementById("wd_type").value = data.type;
+                                document.getElementById("wd_F_id").value = data.f_ID;
+                                document.getElementById("bg").value = data.remarks;
+                            }
+                        }
+                    })
+                }
+            }
+        }
+    })
+</script>

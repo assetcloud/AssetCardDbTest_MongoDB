@@ -19,10 +19,10 @@
 
     <!-- 引入vue文件-->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <!-- 引入样式 -->
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <!-- 引入组件库 -->
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <!-- 引入样式
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
+    <!-- 引入组件库
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
 </head>
 <body>
     <header>
@@ -39,42 +39,69 @@
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index" onmouseover="mousin0()" onmouseout="mousout0()">实际资产操作</a>
                             <ul name="Table_sj" style="display:none;position: fixed;background:rgba(255, 255, 255, 0.80);" onmouseover="mousin0()" onmouseout="mousout0()">
                                 <li class="nav-item">
-                                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="add">资产添加</a>
+                                    <a class="nav-link" asp-area="" asp-controller="ZC_" asp-action="add">资产信息添加</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="query_zc">资产查询</a>
+                                    <a class="nav-link" asp-area="" asp-controller="ZC_" asp-action="query_zc">资产信息查询</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="ZC_" asp-action="Updata_zc">资产信息修改</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="ZC_" asp-action="Del_zc">资产信息删除</a>
                                 </li>
                             </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="manage_zc_type">资产类别操作</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index" onmouseover="mousin1()" onmouseout="mousout1()">元属性操作</a>
                             <ul name="Table_yuan" style="display:none;position: fixed;background:rgba(255, 255, 255, 0.80);" onmouseover="mousin1()" onmouseout="mousout1()">
                                 <li style="margin:10px">
-                                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="add_ysx">元属性增加</a>
+                                    <a class="nav-link" asp-area="" asp-controller="YSX_" asp-action="add_ysx">元属性增加</a>
                                 </li>
                                 <li style="margin:10px">
-                                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="query_ysx">元属性查询</a>
+                                    <a class="nav-link" asp-area="" asp-controller="YSX_" asp-action="query_ysx">元属性查询</a>
+                                </li>
+                                <li style="margin:10px">
+                                    <a class="nav-link" asp-area="" asp-controller="YSX_" asp-action="Up_Ysx">元属性修改</a>
+                                </li>
+                                <li style="margin:10px">
+                                    <a class="nav-link" asp-area="" asp-controller="YSX_" asp-action="Del_ysx">元属性删除</a>
                                 </li>
                             </ul>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index" onmouseover="mousin2()" onmouseout="mousout2()">维度操作</a>
                             <ul name="Table_wei" style="display:none;position: fixed;background:rgba(255, 255, 255, 0.80);" onmouseover="mousin2()" onmouseout="mousout2()">
-                                <!--
-                                    <li style="margin:10px">
-                                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="add_wd">增加维度</a>
-                                    </li>
-                                -->
-
                                 <li style="margin:10px">
-                                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="add_wdxx">增加维度信息</a>
+                                    <a class="nav-link" asp-area="" asp-controller="WD_" asp-action="add_wdxx">增加维度信息</a>
                                 </li>
                                 <li style="margin:10px">
-                                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="query_wd">维度查询</a>
+                                    <a class="nav-link" asp-area="" asp-controller="WD_" asp-action="query_wd">维度信息查询</a>
                                 </li>
+                                <li style="margin:10px">
+                                    <a class="nav-link" asp-area="" asp-controller="WD_" asp-action="Up_wd">维度信息修改</a>
+                                </li>
+                                <li style="margin:10px">
+                                    <a class="nav-link" asp-area="" asp-controller="WD_" asp-action="Del_wd">维度信息删除</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index" onmouseover="mousin3()" onmouseout="mousout3()">资产类别操作</a>
+                            <ul name="zc_type" style="display:none;position: fixed;background:rgba(255, 255, 255, 0.80);" onmouseover="mousin3()" onmouseout="mousout3()">
+                                <li style="margin:10px">
+                                    <a class="nav-link" asp-area="" asp-controller="ZC_Type" asp-action="add_zc_type">资产类别增加</a>
+                                </li>
+                                <li style="margin:10px">
+                                    <a class="nav-link" asp-area="" asp-controller="ZC_Type" asp-action="manage_zc_type">资产类别修改</a>
+                                </li>
+                                <li style="margin:10px">
+                                    <a class="nav-link" asp-area="" asp-controller="ZC_Type" asp-action="del_zc_type">资产类别删除</a>
+                                </li>
+                                <!--    =资产类别查询
+                                <li style="margin:10px">
+                                    <a class="nav-link" asp-area="" asp-controller="ZC_Type" asp-action="qu_type">资产类别查询</a>
+                                </li> -->
                             </ul>
                         </li>
                     </ul>
@@ -140,6 +167,12 @@
         }
         function mousout2() {
             document.getElementsByName("Table_wei")[0].style["display"] = "none";
+        }
+        function mousin3() {
+            document.getElementsByName("zc_type")[0].style["display"] = "block";
+        }
+        function mousout3() {
+            document.getElementsByName("zc_type")[0].style["display"] = "none";
         }
     </script>
     @RenderSection("Scripts", required: false)

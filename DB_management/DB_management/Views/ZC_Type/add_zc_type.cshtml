@@ -1,28 +1,22 @@
 ﻿@{
-    ViewData["Title"] = "添加维度";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "添加资产类别";
 }
-
 <div style="width: 975px;height: 500px;margin-left: 70px;margin-right: 70px;background: rgba(255, 255, 255, 0.65);border: solid 3px;border-color: #0aafb7;overflow-y:auto; overflow-x:auto;">
     <div>
-        <h2 align="center">添加维度 </h2>
+        <h2 align="center">添加资产类别 </h2>
         <hr />
-        <form action="/Home/addWD_OK" method="post">
+        <form action="/ZC_Type/addTYPE_OK" method="post">
             <div style="margin-top:15px;margin-left:300px;font-size:large;">
             </div>
             <hr />
             <ul style="padding-left:0px;margin-left:300px">
                 <li style="">
-                    <label style="width:150px">请输入维度名称</label>
-                    <input style="margin-left:10px;" name="wd_name" />
+                    <label style="width:150px">请输入类别名称</label>
+                    <input style="margin-left:10px;" name="type_name" />
                 </li>
                 <li style="">
-                    <label style="width:150px" align="left">请输入维度id</label>
-                    <input style="margin-left:10px;" name="wd_id" />
-                </li>
-                <li style="">
-                    <label style="width:150px" align="left">请输入备注信息</label>
-                    <input style="margin-left:10px;" name="bg" />
+                    <label style="width:150px" align="left">请输入要继承的类别</label>
+                    <input style="margin-left:10px;" name="F_name" />
                 </li>
             </ul>
             <hr />

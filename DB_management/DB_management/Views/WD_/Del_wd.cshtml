@@ -1,0 +1,63 @@
+﻿@{
+    ViewData["Title"] = "资产类别删除";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div style="width: 975px;height: 500px;margin-left: 70px;margin-right: 70px;background: rgba(255, 255, 255, 0.65);border: solid 3px;border-color: #0aafb7;overflow-y:auto; overflow-x:auto;">
+    <div id="classify">
+        <h2 align="center">资产类别删除 </h2>
+        <hr />
+        <form action="/WD_/Del_wd_OK" method="post">
+            <ul>
+                <li>
+                    <div id="classify">
+                        <label style="margin-left:10px;">请选择维度类别：</label>
+                        <select name="Kindda" id="Kindda" style="margin-left:5px;" v-on:change="Kinddachange">
+                            <option v-for="value in classify">
+                                {{ value}}
+                            </option>
+                        </select>
+                        <label style="margin-left:10px;">请选择维度名称：</label>
+                        <select name="One_Class" id="One_Class" style="margin-left:5px;" v-on:change="One_Classchange">
+                            <option>
+                                -- 名称 --
+                            </option>
+                        </select>
+                    </div>
+                </li>
+            </ul>
+            <div>
+                <input type="button" style="float:right;margin-right:25px" value="取消" />
+                <input type="submit" style="float:right;margin-right:25px" value="提交" />
+                <hr style="display:inline" />
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    var vue = new Vue({
+        el: '#classify',
+        data: {
+            classify:["-- 维度 --","资产类别维度","应用特性维度","管理者维度","自定义维度"]
+        },
+        methods: {
+            Kinddachange: function () {
+                document.getElementById("One_Class").innerText = "";
+                if (document.getElementById("Kindda").selectedIndex != 0) {
+                    $.ajax({
+                        url: "/API_/Get_WD_name",
+                        type: "get",
+                        data: { "Type": this.classify[document.getElementById("Kindda").selectedIndex] },
+                        success: function (data) {
+                            for (i = 0; i < data.length; i++) {
+                                document.getElementById("One_Class").options.add(new Option(data[i]));
+                            }
+                        }
+                    })
+                }
+            },
+            One_Classchange: function () {
+                ;
+            }
+        }
+    })
+</script>

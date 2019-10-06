@@ -11,11 +11,14 @@ namespace DB_management.Model
     [BsonIgnoreExtraElements]
     public class Class_template
     {
-        public List<string> KZ_SX { set; get; }
+        public List<string> ZC_SX { set; get; }   //扩展属性名称
+        public string BM { set; get; }
         public string TPYE { set; get; }
+        public string F_id { set; get; }
+        public string bz { set; get; }
         public Class_template(String type)
         {
-            KZ_SX = new List<string>();
+            ZC_SX = new List<string>();
             TPYE = type;
             M_Db_Operate m_Db_Operate = new M_Db_Operate();
             var client = new MongoClient("mongodb://127.0.0.1:27017");
@@ -26,12 +29,27 @@ namespace DB_management.Model
             List<string> value = new List<string>();
             key.Add("TPYE");
             value.Add(type);
+            ZC_SX = m_Db_Operate.Inquire_Data(collection, key, value)[0].ZC_SX;
+        }
+        public void insert_c()
+        {
+            var client = new MongoClient("mongodb://127.0.0.1:27017");
+            var database = client.GetDatabase("test");
+            var collection = database.GetCollection<Class_template>("Class_templates");
+            Class_template type = new Class_template();
+            type.BM = "2";
+            type.TPYE = "设备装备";
+            collection.InsertOne(type);
 
-            KZ_SX = m_Db_Operate.Inquire_Data(collection, key, value)[0].KZ_SX;
         }
         public Class_template()
         {
-            KZ_SX = new List<string>();
+            ZC_SX = new List<string>();
+        }
+
+        public static implicit operator Class_template(int v)
+        {
+            throw new NotImplementedException();
         }
     }
 }

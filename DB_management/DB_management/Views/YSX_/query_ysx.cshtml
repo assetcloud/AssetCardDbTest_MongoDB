@@ -7,7 +7,7 @@
     <div>
         <h2 align="center">元属性查询</h2>
         <hr />
-        <form action="/Home/query_ysx_1" method="post">
+        <form action="/YSX_/query_ysx_1" method="post">
             <div style="margin-top:15px;margin-left:30px;">
                 <label style="width:220px">查询同一维度信息下所有元属性:</label>
                 <label>维度:</label>
@@ -25,7 +25,7 @@
             </div>
         </form>
         <hr />
-        <form action="/Home/query_ysx_2" method="post">
+        <form action="/YSX_/query_ysx_2" method="post">
             <div style="margin-top:15px;margin-left:30px;">
                 <label>查询单一元属性，</label>
                 <label>请输入元属性名称:</label>
@@ -68,7 +68,16 @@
                         <td style="width:200px">@YSX_DATA[i].Dimension_dic["应用特性维度"]</td>
                         <td style="width:200px">@YSX_DATA[i].Dimension_dic["管理者维度"]</td>
                         <td style="width:200px">@YSX_DATA[i].Dimension_dic["资产类别维度"]</td>
-                        <td style="width:200px">@YSX_DATA[i].Dimension_dic["自定义维度"];</td>
+                        <td style="width:200px">
+                            @try
+                            {
+                                @YSX_DATA[i].Dimension_dic["自定义维度"]
+
+                            }
+                            catch
+                            {
+                            }
+                        </td>
                         <td style="width:200px">@YSX_DATA[i].Length</td>
                         <td style="width:200px">@YSX_DATA[i].Edition</td>
                         <td style="width:200px">@YSX_DATA[i].Remarks</td>

@@ -1,0 +1,465 @@
+﻿@{
+    ViewData["Title"] = "资产信息删除";
+}
+<div style="width: 975px;height: 500px;margin-left: 70px;margin-right: 70px;background: rgba(255, 255, 255, 0.65);border: solid 3px;border-color: #0aafb7;overflow-y:auto; overflow-x:auto;">
+    <div>
+        <h2 align="center">资产信息删除</h2>
+        <hr />
+        <form action="/ZC_/Del_zc_OK" method="post">
+            <ul>
+                <li>
+                    <div id="classify">
+                        <label style="margin-left:10px;">
+                            请选择资产的门类
+                        </label>
+                        <select name="Kindda" id="Kindda" style="margin-left:5px;" v-on:change="Kinddachange">
+                            <option v-for="value in classify">
+                                {{ value}}
+                            </option>
+                        </select>
+                        <label style="margin-left:10px;">
+                            请选择资产的大类
+                        </label>
+                        <select name="One_Class" id="One_Class" style="margin-left:5px;" v-on:change="One_Classchange">
+                            <option>
+                                -- 大类 --
+                            </option>
+                        </select>
+                    </div>
+                </li>
+                <li>
+                    <div id="zc_ni">
+                        <label style="margin-left:10px;">
+                            请选择资产名称
+                        </label>
+                        <select name="zc_name" id="zc_name" style="margin-left:5px;" v-on:change="zc_namechange">
+                            <option>
+                                -- 资产名称 --
+                            </option>
+                        </select>
+                        <label style="margin-left:10px;">
+                            请选择资产编码
+                        </label>
+                        <select name="zc_id" id="zc_id" style="margin-left:5px;" v-on:change="zc_idchange">
+                            <option>
+                                -- 资产编码 --
+                            </option>
+                        </select>
+                    </div>
+                </li>
+
+                <li>
+                    <div id="int_zc_id">
+                        <label style="margin-left:10px;">请输入资产编码</label>
+                        <input id="int_zc_" name="int_zc_" style="margin-left:5px;" v-on:change="int_zc_id_change" />
+                    </div>
+                </li>
+            </ul>
+            <div>
+                <input type="button" style="float:right;margin-right:25px" value="取消" />
+                <input id="tijiao" type="submit" style="float:right;margin-right:25px" disabled="disabled" value="提交" />
+            </div>
+            <hr />
+        </form>
+    </div>
+    <div>
+        <div>
+            <label>通用元属性:</label>
+            <ul style="padding-left:10px" id="tongyong"></ul>
+            <hr />
+        </div>
+        <div id="name">
+        </div>
+        <div>
+            <label>专用元属性:</label>
+            <ul style="padding-left:10px" id="zhuanyong"></ul>
+            <hr />
+        </div>
+        <div>
+            <label>预定义扩展元属性:</label>
+            <ul style="padding-left:10px" id="kz_ydy"></ul>
+            <hr />
+        </div>
+        <div>
+            <label>挂载元属性:</label>
+            <ul style="padding-left:10px" id="gzsx"></ul>
+            <hr />
+        </div>
+    </div>
+</div>
+
+<script>
+    var v_zc = new Vue({
+        el: '#int_zc_id',
+        methods: {
+            int_zc_id_change: function () {
+                document.getElementById("kz_ydy").innerText = "";
+                document.getElementById("zhuanyong").innerText = "";
+                document.getElementById("tongyong").innerText = "";
+                document.getElementById("gzsx").innerText = "";
+                document.getElementById("One_Class").innerText = "";
+                document.getElementById("One_Class").options.add(new Option("-- 大类 --"));
+                document.getElementById("zc_name").innerText = "";
+                document.getElementById("zc_name").options.add(new Option("-- 资产名称 --"));
+                document.getElementById("zc_id").innerText = "";
+                document.getElementById("zc_id").options.add(new Option("-- 资产编码 --"));
+                $.ajax({
+                    url: "/API_/Get_ZC_XX",
+                    type: "get",
+                    data: { "ID": document.getElementById("int_zc_").value },
+                    success: function (data) {
+                        if (data == null) {
+                            document.getElementById("tijiao").disabled = "disable";
+                            return;
+                        }
+                        document.getElementById("tijiao").disabled = false;
+                        var kz = document.getElementById("kz_ydy");
+                        for (var key in data[1]) {
+                            var ele = document.createElement("li");
+                            ele.style = "display:inline";
+                            ele.id = data[1][key].mp;
+                            var lab = document.createElement("label");
+                            lab.style = "padding-right:10px;width:180px";
+                            lab.innerText = key + ":";
+                            var intp = document.createElement("input");
+                            intp.style = "width:120px";
+                            intp.name = data[1][key].mp;
+                            intp.value = data[1][key].v;
+                            if (key == "文物标识") {
+                                intp.addEventListener("change",
+                                    function () {
+                                        ww_bs();
+                                    }
+                                );
+                                intp.id = key;
+                            }
+                            if (key == "是否包含物联网传感") {
+                                intp.addEventListener("change",
+                                    function () {
+                                        wlw_bs();
+                                    }
+                                );
+                                intp.id = key;
+                            }
+                            if (key == "陈列品标识") {
+                                intp.addEventListener("change",
+                                    function () {
+                                        clw_bs();
+                                    }
+                                );
+                                intp.id = key;
+                            }
+                            //intp.disabled = "disabled";
+                            ele.append(lab);
+                            ele.append(intp);
+                            kz.append(ele);
+                        }
+                        var zy = document.getElementById("zhuanyong");
+                        for (var key in data[0]) {
+                            var ele = document.createElement("li");
+                            ele.style = "display:inline";
+                            ele.id = data[0][key].mp;
+                            var lab = document.createElement("label");
+                            lab.style = "padding-right:10px;width:180px";
+                            lab.innerText = key + ":";
+                            var intp = document.createElement("input");
+                            intp.style = "width:120px";
+                            intp.name = data[0][key].mp;
+                            intp.value = data[0][key].v;
+                            if (key == "文物标识") {
+                                intp.addEventListener("change",
+                                    function () {
+                                        ww_bs();
+                                    }
+                                );
+                                intp.id = key;
+                            }
+                            if (key == "是否包含物联网传感") {
+                                intp.addEventListener("change",
+                                    function () {
+                                        wlw_bs();
+                                    }
+                                );
+                                intp.id = key;
+                            }
+                            if (key == "陈列品标识") {
+                                intp.addEventListener("change",
+                                    function () {
+                                        clw_bs();
+                                    }
+                                );
+                                intp.id = key;
+                            }
+                            //intp.disabled = "disabled";
+                            ele.append(lab);
+                            ele.append(intp);
+                            zy.append(ele);
+                        }
+                        var ty = document.getElementById("tongyong");
+                        for (var key in data[2]) {
+                            var ele = document.createElement("li");
+                            ele.style = "display:inline";
+                            ele.id = data[2][key].mp;
+                            var lab = document.createElement("label");
+                            lab.style = "padding-right:10px;width:180px";
+                            lab.innerText = key + ":";
+                            var intp = document.createElement("input");
+                            intp.style = "width:120px";
+                            intp.name = data[2][key].mp;
+                            intp.value = data[2][key].v;
+                            //intp.disabled = "disabled";
+                            ele.append(lab);
+                            ele.append(intp);
+                            ty.append(ele);
+                        }
+                        var gz = document.getElementById("gzsx");
+                        for (var key in data[3]) {
+                            var ele = document.createElement("li");
+                            ele.style = "display:inline";
+                            ele.id = "ww_" + key;
+                            var lab = document.createElement("label");
+                            lab.style = "padding-right:10px;width:180px";
+                            lab.innerText = key + ":";
+                            var intp = document.createElement("input");
+                            intp.style = "width:120px";
+                            intp.name = data[3][key].mp;
+                            intp.value = data[3][key].v;
+                            //intp.disabled = "disabled";
+                            ele.append(lab);
+                            ele.append(intp);
+                            gz.append(ele);
+                        }
+                        for (var key in data[4]) {
+                            var ele = document.createElement("li");
+                            ele.style = "display:inline";
+                            ele.id = "wlw_" + key;
+                            var lab = document.createElement("label");
+                            lab.style = "padding-right:10px;width:180px";
+                            lab.innerText = key + ":";
+                            var intp = document.createElement("input");
+                            intp.style = "width:120px";
+                            intp.name = data[4][key].mp;
+                            intp.value = data[4][key].v;
+                            //intp.disabled = "disabled";
+                            ele.append(lab);
+                            ele.append(intp);
+                            gz.append(ele);
+                        }
+                        for (var key in data[5]) {
+                            var ele = document.createElement("li");
+                            ele.style = "display:inline";
+                            ele.id = "clw_" + key;
+                            var lab = document.createElement("label");
+                            lab.style = "padding-right:10px;width:180px";
+                            lab.innerText = key + ":";
+                            var intp = document.createElement("input");
+                            intp.style = "width:120px";
+                            intp.name = data[5][key].mp;
+                            intp.value = data[5][key].v;
+                            //intp.disabled = "disabled";
+                            ele.append(lab);
+                            ele.append(intp);
+                            gz.append(ele);
+                        }
+                    }
+                })
+
+            }
+        }
+    })
+</script>
+<script>
+    var vue = new Vue({
+        el: '#classify',
+        data: {
+            classify: ["-- 门类 --", "工程建筑", "设备装备", "图书档案", "知识产权", "自然资源", "权益许可", "材料用品", "数据信息", "金融款项",
+            ],
+            type: ""
+        },
+        methods: {
+            Kinddachange: function () {
+                document.getElementById("One_Class").innerText = "";
+                document.getElementById("kz_ydy").innerText = "";
+                document.getElementById("zhuanyong").innerText = "";
+                document.getElementById("tongyong").innerText = "";
+                document.getElementById("gzsx").innerText = "";
+                document.getElementById("One_Class").options.add(new Option("-- 大类 --"));
+                if (document.getElementById("Kindda").selectedIndex != 0) {
+                    $.ajax({
+                        url: "/API_/Get_Two_Type",
+                        type: "get",
+                        data: { "type": document.getElementById("Kindda").value },
+                        success: function (data) {
+                            for (i = 0; i < data.length; i++) {
+                                document.getElementById("One_Class").options.add(new Option(data[i]));
+                            }
+                            document.getElementById("One_Class").options.add(new Option("不选择--"));
+                        }
+                    })
+                }
+                for (i = 0; i < this.classify[document.getElementById("Kindda").selectedIndex].One_Class.length; i++) {
+                    document.getElementById("One_Class").options.add(new Option(this.classify[document.getElementById("Kindda").selectedIndex].One_Class[i]));
+                }
+                One_Classchange();
+            },
+            One_Classchange: function () {
+                document.getElementById("zc_name").innerText = "";
+                document.getElementById("zc_name").options.add(new Option("-- 资产名称 --"));
+                document.getElementById("zc_id").innerText = "";
+                document.getElementById("zc_id").options.add(new Option("-- 资产编码 --"));
+                document.getElementById("kz_ydy").innerText = "";
+                document.getElementById("zhuanyong").innerText = "";
+                document.getElementById("tongyong").innerText = "";
+                document.getElementById("gzsx").innerText = "";
+
+                var types;
+                if (document.getElementById("One_Class").value == "-- 大类 --")
+                    return;
+                else if (document.getElementById("One_Class").value == "不选择--")
+                    types = document.getElementById("Kindda").value;
+                else
+                    types = document.getElementById("One_Class").value;
+                $.ajax({
+                    url: "/API_/Get_ZC_NI",
+                    type: "get",
+                    data: { "Type": types },
+                    success: function (data) {
+                        for (i = 0; i < data[0].length; i++) {
+                            document.getElementById("zc_name").options.add(new Option(data[0][i]));
+                        }
+                        for (i = 0; i < data[1].length; i++) {
+                            document.getElementById("zc_id").options.add(new Option(data[1][i]));
+                        }
+                    }
+                })
+
+            }
+        }
+    })
+    var zc_ni = new Vue({
+        el: '#zc_ni',
+        methods: {
+            zc_namechange: function () {
+                if (document.getElementById("zc_name").value == "-- 资产名称 --") {
+                    vue.One_Classchange();
+                    document.getElementById("kz_ydy").innerText = "";
+                    document.getElementById("zhuanyong").innerText = "";
+                    document.getElementById("tongyong").innerText = "";
+                    document.getElementById("gzsx").innerText = "";
+                    return;
+                }
+                var types;
+                if (document.getElementById("One_Class").value == "-- 大类 --")
+                    return;
+                else if (document.getElementById("One_Class").value == "不选择--")
+                    types = document.getElementById("Kindda").value;
+                else
+                    types = document.getElementById("One_Class").value;
+                var names = document.getElementById("zc_name").value;
+                $.ajax({
+                    url: "/API_/Get_ZC_NI",
+                    type: "get",
+                    data: {
+                        "Type": types,
+                        "Name": names
+                    },
+                    success: function (data) {
+                        document.getElementById("zc_id").innerText = "";
+                        document.getElementById("zc_id").options.add(new Option("-- 资产编码 --"));
+                        for (i = 0; i < data[1].length; i++) {
+                            document.getElementById("zc_id").options.add(new Option(data[1][i]));
+                        }
+                    }
+                });
+            },
+            zc_idchange: function () {
+                document.getElementById("kz_ydy").innerText = "";
+                document.getElementById("zhuanyong").innerText = "";
+                document.getElementById("tongyong").innerText = "";
+                document.getElementById("gzsx").innerText = "";
+                if (document.getElementById("zc_id").value == "-- 资产编码 --") {
+                    document.getElementById("tijiao").disabled = "disabled";
+                    return;
+                }
+                document.getElementById("tijiao").disabled = false;
+                $.ajax({
+                    url: "/API_/Get_ZC_XX",
+                    type: "get",
+                    data: { "ID": document.getElementById("zc_id").value },
+                    success: function (data) {
+                        var kz = document.getElementById("kz_ydy");
+                        for (var key in data[1]) {
+                            var ele = document.createElement("li");
+                            ele.style = "display:inline";
+                            ele.id = data[1][key].mp;
+                            var lab = document.createElement("label");
+                            lab.style = "padding-right:10px;width:180px";
+                            lab.innerText = key + ":";
+                            var intp = document.createElement("input");
+                            intp.style = "width:120px";
+                            intp.name = data[1][key].v;
+                            intp.value = data[1][key].v;
+                            intp.disabled = "disabled";
+                            ele.append(lab);
+                            ele.append(intp);
+                            kz.append(ele);
+                        }
+                        var zy = document.getElementById("zhuanyong");
+                        for (var key in data[0]) {
+                            var ele = document.createElement("li");
+                            ele.style = "display:inline";
+                            ele.id = data[0][key].mp;
+                            var lab = document.createElement("label");
+                            lab.style = "padding-right:10px;width:180px";
+                            lab.innerText = key + ":";
+                            var intp = document.createElement("input");
+                            intp.style = "width:120px";
+                            intp.name = data[0][key].v;
+                            intp.value = data[0][key].v;
+                            intp.disabled = "disabled";
+                            ele.append(lab);
+                            ele.append(intp);
+                            zy.append(ele);
+                        }
+                        var ty = document.getElementById("tongyong");
+                        for (var key in data[2]) {
+                            var ele = document.createElement("li");
+                            ele.style = "display:inline";
+                            ele.id = data[2][key].mp;
+                            var lab = document.createElement("label");
+                            lab.style = "padding-right:10px;width:180px";
+                            lab.innerText = key + ":";
+                            var intp = document.createElement("input");
+                            intp.style = "width:120px";
+                            intp.name = data[2][key].v;
+                            intp.value = data[2][key].v;
+                            intp.disabled = "disabled";
+                            ele.append(lab);
+                            ele.append(intp);
+                            ty.append(ele);
+                        }
+                        var gz = document.getElementById("gzsx");
+                        for (i = 3; i < 6; i++) {
+                            for (var key in data[i]) {
+                                var ele = document.createElement("li");
+                                ele.style = "display:inline";
+                                ele.id = data[i][key].mp;
+                                var lab = document.createElement("label");
+                                lab.style = "padding-right:10px;width:180px";
+                                lab.innerText = key + ":";
+                                var intp = document.createElement("input");
+                                intp.style = "width:120px";
+                                intp.name = data[i][key].v;
+                                intp.value = data[i][key].v;
+                                intp.disabled = "disabled";
+                                ele.append(lab);
+                                ele.append(intp);
+                                gz.append(ele);
+                            }
+                        }
+                    }
+                })
+            }
+        }
+    })
+</script>

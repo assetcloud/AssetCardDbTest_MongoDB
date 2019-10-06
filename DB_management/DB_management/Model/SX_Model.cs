@@ -24,7 +24,7 @@ namespace DB_management.Models
             key0.Add("Name");
             List<string> value0 = new List<string>();
             value0.Add(Names);
-            var ysx0 = m_Db_Operate.Inquire_Data(collection, key0, value0);
+            var ysx0 = m_Db_Operate.Inquire_Data(collection, key0, value0);  //查询数据
             ID = ysx0[0].ID;
             Name = ysx0[0].Name;
             Length = ysx0[0].Length;

@@ -1,8 +1,5 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
-
-    var ZC_datas = (List<List<string>>)ViewData["ZC_datas"];
-    var sx_name = (List<string>)ViewData["sx_name"];
 }
 
 <div style="width: 975px;height: 500px;margin-left: 70px;margin-right: 70px;background: rgba(255, 255, 255, 0.65);white-space:nowrap;border: solid 3px;border-color: #0aafb7;overflow-y:auto;overflow-x:auto;">
@@ -10,26 +7,9 @@
         <h2 align="center">资产信息</h2>
         <hr />
         <div>
-            <table>
-                <tr>
-                    @for(int i = 0; i < sx_name.Count; i++)
-                    {
-                        <th style="width:100px">@sx_name[i]</th>
-                    }
-                </tr>
-            </table>
-            <hr />
-            <table id='myMsgTable'>
-                @for (int i = 0; i < @ZC_datas.Count; i++)
-                {
-                    <tr>
-                        @foreach (var data in @ZC_datas[i])
-                        {
-                            <td style="min-width:100px">@data</td>
-                        }
-                    </tr>
-                }
-            </table>
+            <h3>说明</h3>
+            <p>本程序仅做测试用途</p>
+            <p>本程序不对需要输入的字段值进行限制，请在输入时注意字段值的输入格式</p>
         </div>
     </div>
 </div>

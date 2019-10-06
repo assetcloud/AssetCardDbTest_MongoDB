@@ -1,0 +1,157 @@
+﻿@{
+    ViewData["Title"] = "资产类别删除";
+
+    var KZJ = (List<YSX_Model>)ViewData["KZJ_Names"];
+    var ty_names = (List<string>)ViewData["ty_names"];
+    List<string> kz_ = new List<string>();
+    List<string> zy_ = new List<string>();
+}
+<div style="width: 975px;height: 500px;margin-left: 70px;margin-right: 70px;background: rgba(255, 255, 255, 0.65);border: solid 3px;border-color: #0aafb7;overflow-y:auto; overflow-x:auto;">
+    <div id="classify">
+        <h2 align="center">资产类别删除 </h2>
+        <hr />
+        <label>类别选择:</label>
+        <form action="/ZC_Type/del_type" method="post">
+            <ul>
+                <li>
+                    <div>
+                        <label style="margin-left:10px;">请选择门类：</label>
+                        <select name="Kindda" id="Kindda" style="margin-left:5px;" v-on:change="Kinddachange">
+                            <option v-for="value in classify" v-bind:value="value.Kindda">
+                                {{ value.Kindda }}
+                            </option>
+                        </select>
+                        <label style="margin-left:10px;">请选择大类：</label>
+                        <select name="One_Class" id="One_Class" style="margin-left:5px;" v-on:change="One_Classchange">
+                            <option>
+                                -- 大类 --
+                            </option>
+                        </select>
+                    </div>
+                </li>
+            </ul>
+            <div>
+                <input type="button" style="float:right;margin-right:25px" value="取消" />
+                <input type="submit" style="float:right;margin-right:25px" value="提交" />
+                <hr style="display:inline" />
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    var kz_sum = 0;
+    function kuozhan_add() {
+        kz_sum++;
+        var ul = document.getElementById("kuozhan");
+
+        var li = document.createElement("li");
+        var label1 = document.createElement("label");
+        var select = document.createElement("select");
+
+        li.style = "display: inline-block;margin-left:50px";
+
+        label1.innerHTML = "请选择属性名称";
+        label1.style = "margin-left:20px";
+        select.style = "margin-left:20px";
+
+        select.name = "kz_key_" + kz_sum.toString();
+        var sl = document.getElementById("kz");
+        var a = sl.getElementsByTagName("option");
+        for (var i = 0; i < a.length; i++) {
+            var option = document.createElement("option");
+            option.innerHTML = a[i].innerHTML;
+            select.appendChild(option);
+        }
+
+        li.appendChild(label1);
+        li.appendChild(select);
+        ul.appendChild(li);
+    }
+    function shanchu_add() {
+        kz_sum++;
+        var ul = document.getElementById("shanchu");
+
+        var li = document.createElement("li");
+        var label1 = document.createElement("label");
+        var select = document.createElement("select");
+        li.style = "display: inline-block;margin-left:50px";
+        for (i = 0; i < kz_.length; i++) {
+            select.options.add(new Option(kz_[i]));
+        }
+        for (i = 0; i < zy_.length; i++) {
+            select.options.add(new Option(zy_[i]));
+        }
+        label1.innerHTML = "请选择属性名称";
+        label1.style = "margin-left:20px";
+        select.style = "margin-left:20px";
+
+        select.name = "sc_key_" + kz_sum.toString();
+
+        li.appendChild(label1);
+        li.appendChild(select);
+        ul.appendChild(li);
+    }
+</script>
+<script>
+    var vue = new Vue({
+        el: '#classify',
+        data: {
+            classify: [
+                {
+                    Kindda: "-- 门类 --",
+                },
+                {
+                    Kindda: "工程建筑",
+                },
+                {
+                    Kindda: "设备装备",
+                },
+                {
+                    Kindda: "图书档案",
+                },
+                {
+                    Kindda: "知识产权",
+                },
+                {
+                    Kindda: "自然资源",
+                },
+                {
+                    Kindda: "权益许可",
+                },
+                {
+                    Kindda: "材料用品",
+                },
+                {
+                    Kindda: "数据信息",
+                },
+                {
+                    Kindda: "金融款项",
+                }
+            ],
+            type: ""
+        },
+        methods: {
+            Kinddachange: function () {
+                document.getElementById("One_Class").innerText = "";
+                document.getElementById("One_Class").options.add(new Option("-- 大类 --"));
+                if (document.getElementById("Kindda").selectedIndex != 0)
+                {
+                    $.ajax({
+                        url: "/API_/Get_Two_Type",
+                        type: "get",
+                        data: { "type": this.classify[document.getElementById("Kindda").selectedIndex].Kindda },
+                        success: function (data) {
+                            for (i = 0; i < data.length; i++) {
+                                document.getElementById("One_Class").options.add(new Option(data[i]));
+                            }
+                            document.getElementById("One_Class").options.add(new Option("不选择--"));
+                        }
+                    })
+                }
+                for (i = 0; i < this.classify[document.getElementById("Kindda").selectedIndex].One_Class.length; i++) {
+                    document.getElementById("One_Class").options.add(new Option(this.classify[document.getElementById("Kindda").selectedIndex].One_Class[i]));
+                }
+            }
+        }
+    })
+</script>

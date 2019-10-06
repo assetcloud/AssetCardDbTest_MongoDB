@@ -1,0 +1,339 @@
+﻿@{
+    ViewData["Title"] = "资产添加";
+    var ty_name = (List<string>)ViewData["ty_names"];
+}
+<div style="width: 975px;height: 500px;margin-left: 70px;margin-right: 70px;background: rgba(255, 255, 255, 0.65);border: solid 3px;border-color: #0aafb7;overflow-y:auto; overflow-x:auto;">
+    <div id="classify">
+        <label>类别选择:</label>
+        <form action="/ZC_/addZC_OK" method="post">
+            <ul>
+                <li>
+                    <div>
+                        <label style="margin-left:10px;">请选择门类：</label>
+                        <select name="Kindda" id="Kindda" style="margin-left:5px;" v-on:change="Kinddachange">
+                            <option v-for="value in classify" v-bind:value="value.Kindda">
+                                {{ value.Kindda }}
+                            </option>
+                        </select>
+                        <label style="margin-left:10px;">请选择大类：</label>
+                        <select name="One_Class" id="One_Class" style="margin-left:5px;" v-on:change="One_Classchange">
+                            <option>
+                                -- 大类 --
+                            </option>
+                        </select>
+                    </div>
+                </li>
+            </ul>
+            <hr />
+            <div>
+                <label>通用元属性:</label>
+                <ul style="padding-left:10px" id="tongyong">
+                    @foreach (var ty in ty_name)
+                    {
+                        <li style="display:inline">
+                            <label style="padding-right:10px;width:180px"> @ty:</label>
+                            <input style="width:120px" id="@ty" name="@ty" />
+                        </li>
+                    }
+                </ul>
+                <hr />
+            </div>
+            <div id="name">
+            </div>
+            <div>
+                <label>专用元属性:</label>
+                <ul style="padding-left:10px" id="zhuanyong"></ul>
+                <hr />
+            </div>
+            <div>
+                <label>预定义扩展元属性:</label>
+                <ul style="padding-left:10px" id="kz_ydy"></ul>
+                <hr />
+            </div>
+            <div>
+                <label>挂载元属性:</label>
+                <ul style="padding-left:10px" id="gzsx">
+
+
+                </ul>
+                <hr />
+            </div>
+            <div>
+                <input type="button" style="float:right;margin-right:25px" value="取消" />
+                <input type="submit" style="float:right;margin-right:25px" value="提交" />
+                <hr style="display:inline" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function ww_bs() {
+        if (document.getElementById("文物标识").value == "1") {
+            $.ajax({
+                url: "/API_/Get_YSXS_Name",
+                type: "get",
+                data: {
+                    "WD": "应用特性维度",
+                    "Name": "文物信息"
+                },
+                success: function (data) {
+                    var gz = document.getElementById("gzsx");
+                    for (var name in data) {
+                        var ele = document.createElement("li");
+                        ele.style = "display:inline";
+                        ele.id = "ww_" + name;
+                        var lab = document.createElement("label");
+                        lab.style = "padding-right:10px;width:180px";
+                        lab.innerText = data[name] + ":";
+                        var intp = document.createElement("input");
+                        intp.style = "width:120px";
+                        intp.name = name;
+                        ele.append(lab);
+                        ele.append(intp);
+                        gz.append(ele);
+                    }
+                }
+            })
+        }
+        else {
+            $.ajax({
+                url: "/API_/Get_YSXS_Name",
+                type: "get",
+                data: {
+                    "WD": "应用特性维度",
+                    "Name": "文物信息"
+                },
+                success: function (data) {
+                    for (var name in data) {
+                        document.getElementById("ww_" + name).remove();
+                    }
+                }
+            })
+            
+        }
+    }
+    function wlw_bs() {
+        if (document.getElementById("是否包含物联网传感").value == "1") {
+            $.ajax({
+                url: "/API_/Get_YSXS_Name",
+                type: "get",
+                data: {
+                    "WD": "应用特性维度",
+                    "Name": "物联网信息"
+                },
+                success: function (data) {
+                    var gz = document.getElementById("gzsx");
+                    for (var name in data) {
+                        var ele = document.createElement("li");
+                        ele.style = "display:inline";
+                        ele.id = "wlw_" + name;
+                        var lab = document.createElement("label");
+                        lab.style = "padding-right:10px;width:180px";
+                        lab.innerText = data[name] + ":";
+                        var intp = document.createElement("input");
+                        intp.style = "width:120px";
+                        intp.name = name;
+                        ele.append(lab);
+                        ele.append(intp);
+                        gz.append(ele);
+                    }
+                }
+            })
+        }
+        else {
+            $.ajax({
+                url: "/API_/Get_YSXS_Name",
+                type: "get",
+                data: {
+                    "WD": "应用特性维度",
+                    "Name": "物联网信息"
+                },
+                success: function (data) {
+                    for (var name in data) {
+                        document.getElementById("wlw_" + name).remove();
+                    }
+                }
+            })
+
+        }
+    }
+    function clw_bs() {
+        if (document.getElementById("陈列品标识").value == "1") {
+            $.ajax({
+                url: "/API_/Get_YSXS_Name",
+                type: "get",
+                data: {
+                    "WD": "应用特性维度",
+                    "Name": "标本信息"
+                },
+                success: function (data) {
+                    var gz = document.getElementById("gzsx");
+                    for (var name in data) {
+                        var ele = document.createElement("li");
+                        ele.name = "biaoben";
+                        ele.style = "display:inline";
+                        ele.id = "clw_" + name;
+                        var lab = document.createElement("label");
+                        lab.style = "padding-right:10px;width:180px";
+                        lab.innerText = data[name] + ":";
+                        var intp = document.createElement("input");
+                        intp.style = "width:120px";
+                        intp.name = name;
+                        ele.append(lab);
+                        ele.append(intp);
+                        gz.append(ele);
+                    }
+                }
+            })
+        }
+        else {
+            $.ajax({
+                url: "/API_/Get_YSXS_Name",
+                type: "get",
+                data: {
+                    "WD": "应用特性维度",
+                    "Name": "标本信息"
+                },
+                success: function (data) {
+                    for (var name in data) {
+                        document.getElementById("clp_" + name).remove();
+                    }
+                }
+            })
+
+        }
+    }
+</script >
+<script>
+    var vue = new Vue({
+        el: '#classify',
+        data: {
+            classify: [
+                {
+                    Kindda: "-- 门类 --",
+                },
+                {
+                    Kindda: "工程建筑",
+                },
+                {
+                    Kindda: "设备装备",
+                },
+                {
+                    Kindda: "图书档案",
+                },
+                {
+                    Kindda: "知识产权",
+                },
+                {
+                    Kindda: "自然资源",
+                },
+                {
+                    Kindda: "权益许可",
+                },
+                {
+                    Kindda: "材料用品",
+                },
+                {
+                    Kindda: "数据信息",
+                },
+                {
+                    Kindda: "金融款项",
+                }
+            ],
+            type: ""
+        },
+        methods: {
+            Kinddachange: function () {
+                document.getElementById("One_Class").innerText = "";
+                if (document.getElementById("Kindda").selectedIndex != 0) {
+                    $.ajax({
+                        url: "/API_/Get_Two_Type",
+                        type: "get",
+                        data: { "type": this.classify[document.getElementById("Kindda").selectedIndex].Kindda },
+                        success: function (data) {
+                            document.getElementById("One_Class").options.add(new Option("-- 大类 --"));
+                            for (i = 0; i < data.length; i++) {
+                                document.getElementById("One_Class").options.add(new Option(data[i]));
+                            }
+                            document.getElementById("One_Class").options.add(new Option("不选择--"));
+                        }
+                    })
+                }
+                for (i = 0; i < this.classify[document.getElementById("Kindda").selectedIndex].One_Class.length; i++) {
+                    document.getElementById("One_Class").options.add(new Option(this.classify[document.getElementById("Kindda").selectedIndex].One_Class[i]));
+                }
+            },
+            One_Classchange: function () {
+                document.getElementById("zhuanyong").innerHTML = "";
+                document.getElementById("kz_ydy").innerText = "";
+                if (document.getElementById("One_Class").value == "-- 大类 --")
+                    return;
+                else if (document.getElementById("One_Class").value == "不选择--")
+                    this.type = document.getElementById("Kindda").value;
+                else
+                    this.type = document.getElementById("One_Class").value;
+                document.getElementById("上级资产分类名称").value = this.type;
+                $.ajax({
+                    url: "/API_/Get_Type",
+                    type: "get",
+                    data: { "type": this.type },
+                    success: function (data) {
+                        var zy = document.getElementById("zhuanyong");
+                        for (i = 0; i < data[0].length; i++) {
+                            var ele = document.createElement("li");
+                            ele.style = "display:inline";
+                            var lab = document.createElement("label");
+                            lab.style = "padding-right:10px;width:180px";
+                            lab.innerText = data[0][i] + ":";
+                            var intp = document.createElement("input");
+                            intp.style = "width:120px";
+                            if (data[0][i] == "文物标识") {
+                                intp.addEventListener("change",
+                                    function () {
+                                        ww_bs();
+                                    }
+                                );
+                                intp.id = data[0][i];
+                            }
+                            if (data[0][i] == "是否包含物联网传感") {
+                                intp.addEventListener("change",
+                                    function () {
+                                        wlw_bs();
+                                    }
+                                );
+                                intp.id = data[0][i];
+                            }
+                            if (data[0][i] == "陈列品标识") {
+                                intp.addEventListener("change",
+                                    function () {
+                                        clw_bs();
+                                    }
+                                );
+                                intp.id = data[0][i];
+                            }
+                            intp.name = data[0][i];
+                            ele.append(lab);
+                            ele.append(intp);
+                            zy.append(ele);
+                        }
+                        var kz = document.getElementById("kz_ydy");
+                        for (i = 0; i < data[1].length; i++) {
+                            var ele = document.createElement("li");
+                            ele.style = "display:inline";
+                            var lab = document.createElement("label");
+                            lab.style = "padding-right:10px;width:180px";
+                            lab.innerText = data[1][i] + ":";
+                            var intp = document.createElement("input");
+                            intp.style = "width:120px";
+                            intp.name = data[1][i];
+                            ele.append(lab);
+                            ele.append(intp);
+                            kz.append(ele);
+                        }
+                    }
+                })
+            }
+        }
+    })
+</script>
